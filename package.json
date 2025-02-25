@@ -1,6 +1,6 @@
 {
   "name": "@guardx/source",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "license": "MIT",
   "scripts": {
     "build": "nx build",
