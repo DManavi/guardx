@@ -1,5 +1,5 @@
-import * as check from './check';
-import * as util from './util';
+import * as check from './check.js';
+import * as util from './util.js';
 
 /**
  * Type assertion functions are a new feature in TypeScript 3.7.

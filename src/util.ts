@@ -1,4 +1,4 @@
-import * as check from './check';
+import * as check from './check.js';
 
 /**
  * Fail options.

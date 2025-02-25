@@ -4,23 +4,16 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
+    "moduleDetection": "force",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2015",
-    "module": "commonjs",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "module": "CommonJS",
+    "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@guardx/source": [
-        "src/index.ts"
-      ]
-    }
+    "baseUrl": "."
   },
   "files": [],
   "include": [],

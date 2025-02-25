@@ -41,6 +41,7 @@
     "@nx/eslint": "19.8.14",
     "@nx/eslint-plugin": "19.8.14",
     "@nx/js": "19.8.14",
+    "@nx/rollup": "19.8.14",
     "@nx/vite": "19.8.14",
     "@nx/web": "19.8.14",
     "@nx/workspace": "19.8.14",
@@ -56,12 +57,36 @@
     "nx": "19.8.14",
     "prettier": "^2.6.2",
     "tslib": "^2.3.0",
+    "tsup": "^8.4.0",
     "typescript": "~5.5.2",
     "typescript-eslint": "^8.0.0",
     "vite": "^5.0.0",
     "vitest": "^1.3.1"
   },
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "typings": "./dist/types/index.d.ts"
+  "type": "commonjs",
+  "main": "./index.cjs",
+  "typings": "./index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./index.mjs",
+      "default": "./index.cjs"
+    },
+    "./assert": {
+      "import": "./assert.mjs",
+      "default": "./assert.cjs"
+    },
+    "./check": {
+      "import": "./check.mjs",
+      "default": "./check.cjs"
+    },
+    "./run": {
+      "import": "./run.mjs",
+      "default": "./run.cjs"
+    },
+    "./util": {
+      "import": "./util.mjs",
+      "default": "./util.cjs"
+    }
+  }
 }

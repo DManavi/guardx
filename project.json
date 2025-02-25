@@ -11,18 +11,14 @@
       "options": {
         "parallel": false,
         "commands": [
-          {
-            "command": "rm -rf dist"
-          },
-          {
-            "command": "tsc -p tsconfig.build.json --outDir dist/types --emitDeclarationOnly"
-          },
-          {
-            "command": "tsc -p tsconfig.build.json --outDir dist/cjs --declaration false"
-          },
-          {
-            "command": "tsc -p tsconfig.build.json --outDir dist/esm --module ES2020  --declaration false"
-          }
+          "tsup",
+          
+          "cp package.json dist/guardx/",
+          "cp README.md dist/guardx/",
+          "cp CHANGELOG.md dist/guardx/",
+          "cp LICENSE.md dist/guardx/",
+
+          "rm -rf dist/guardx/*.d.mts"
         ]
       }
     },
