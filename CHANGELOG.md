@@ -1,3 +1,14 @@
+## 0.0.1 (2025-02-25)
+
+
+### 🩹 Fixes
+
+- change package name ([3d2b2dc](https://github.com/DManavi/guardx/commit/3d2b2dc))
+
+### ❤️  Thank You
+
+- Danial Manavi
+
 ## 0.0.3 (2025-02-25)
 
 
