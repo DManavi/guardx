@@ -16,9 +16,16 @@
     "url": "https://dmanavi.com"
   },
   "keywords": [],
-  "description": "GuardX project",
+  "description": "Protect your typescript/javascript projects from unnecessary if/else branches to check null/undefined values.",
   "scripts": {},
-  "dependencies": {
-    "lodash": "^4.17.21"
+  "devDependencies": {
+    "@types/lodash": "^4.17.15",
+    "@types/node": "22",
+    "lodash": "^4.17.21",
+    "type-fest": "^4.34.1",
+    "typescript": "5"
+  },
+  "peerDependencies": {
+    "lodash": "^4"
   }
 }

@@ -1,23 +1,12 @@
 import { defaultTo } from "lodash";
-import * as typeChecks from "./type-check";
+
+import * as check from "./check";
+import { fail } from "./util";
 
 /**
  * Type assertion functions are a new feature in TypeScript 3.7.
  * https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#assertion-functions
  */
-
-/**
- * Creates an error object if the provided value is a string, otherwise throws the provided error object.
- * @param errorOrMessage Error object or message to throw
- * @returns
- */
-function createOrThrowError(errorOrMessage: string | Error) {
-  if (typeof errorOrMessage === "string") {
-    throw new Error(errorOrMessage);
-  }
-
-  throw errorOrMessage;
-}
 
 /**
  * Asserts that a value is not null.
@@ -28,8 +17,8 @@ export function isNotNull<T = unknown>(
   val?: T,
   errorOrMessage?: string | Error
 ): asserts val is NonNullable<T> {
-  if (typeChecks.isNull(val) === true) {
-    createOrThrowError(defaultTo(errorOrMessage, "Value is null"));
+  if (check.isNull(val) === true) {
+    fail({ errorOrMessage: defaultTo(errorOrMessage, "Value is null") });
   }
 }
 
@@ -43,7 +32,7 @@ export function IsNull<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is null {
   if (val !== null) {
-    createOrThrowError(defaultTo(errorOrMessage, "Value is not null"));
+    fail({ errorOrMessage: defaultTo(errorOrMessage, "Value is not null") });
   }
 }
 
@@ -56,8 +45,8 @@ export function isNotUndefined<T = unknown>(
   val?: T,
   errorOrMessage?: string | Error
 ): asserts val is NonNullable<T> {
-  if (typeChecks.isUndefined(val) === true) {
-    createOrThrowError(defaultTo(errorOrMessage, "Value is undefined"));
+  if (check.isUndefined(val) === true) {
+    fail({ errorOrMessage: defaultTo(errorOrMessage, "Value is undefined") });
   }
 }
 
@@ -71,7 +60,9 @@ export function isUndefined<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is undefined {
   if (val !== undefined) {
-    createOrThrowError(defaultTo(errorOrMessage, "Value is not undefined"));
+    fail({
+      errorOrMessage: defaultTo(errorOrMessage, "Value is not undefined"),
+    });
   }
 }
 
@@ -84,13 +75,13 @@ export function isNotNullOrUndefined<T = unknown>(
   val?: T,
   errorOrMessage?: string | Error
 ): asserts val is NonNullable<T> {
-  if (
-    typeChecks.isNull(val) === true ||
-    typeChecks.isNullOrUndefined(val) === true
-  ) {
-    createOrThrowError(
-      defaultTo(errorOrMessage, "Value is either null or undefined")
-    );
+  if (check.isNull(val) === true || check.isNullOrUndefined(val) === true) {
+    fail({
+      errorOrMessage: defaultTo(
+        errorOrMessage,
+        "Value is either null or undefined"
+      ),
+    });
   }
 }
 
@@ -113,10 +104,13 @@ export function IsNotDefined<T = unknown>(
   val?: T | null,
   errorOrMessage?: string | Error
 ): asserts val is null | undefined {
-  if (typeChecks.isNullOrUndefined(val) === false) {
-    createOrThrowError(
-      defaultTo(errorOrMessage, "Value is neither null nor undefined")
-    );
+  if (check.isNullOrUndefined(val) === false) {
+    fail({
+      errorOrMessage: defaultTo(
+        errorOrMessage,
+        "Value is neither null nor undefined"
+      ),
+    });
   }
 }
 
@@ -132,9 +126,12 @@ export function isEqual<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is T {
   if (val !== expected) {
-    createOrThrowError(
-      defaultTo(errorOrMessage, `Value is not equal to ${expected}`)
-    );
+    fail({
+      errorOrMessage: defaultTo(
+        errorOrMessage,
+        `Value is not equal to ${expected}`
+      ),
+    });
   }
 }
 
@@ -150,9 +147,12 @@ export function isNotEqual<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is T {
   if (val === expected) {
-    createOrThrowError(
-      defaultTo(errorOrMessage, `Value is equal to ${expected}`)
-    );
+    fail({
+      errorOrMessage: defaultTo(
+        errorOrMessage,
+        `Value is equal to ${expected}`
+      ),
+    });
   }
 }
 
@@ -173,12 +173,12 @@ export function isOneOf<T = unknown>(
     }
   }
 
-  createOrThrowError(
-    defaultTo(
+  fail({
+    errorOrMessage: defaultTo(
       errorOrMessage,
       `Value is not one of the allowed values: ${values.join(", ")}`
-    )
-  );
+    ),
+  });
 }
 
 export function isTrue(
@@ -186,7 +186,7 @@ export function isTrue(
   errorOrMessage?: string | Error
 ): asserts val is true {
   if (val !== true) {
-    createOrThrowError(defaultTo(errorOrMessage, "Value is not true"));
+    fail({ errorOrMessage: defaultTo(errorOrMessage, "Value is not true") });
   }
 }
 
@@ -195,6 +195,6 @@ export function isFalse(
   errorOrMessage?: string | Error
 ): asserts val is false {
   if (val !== false) {
-    createOrThrowError(defaultTo(errorOrMessage, "Value is not false"));
+    fail({ errorOrMessage: defaultTo(errorOrMessage, "Value is not false") });
   }
 }
