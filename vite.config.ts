@@ -20,6 +20,6 @@ export default defineConfig({
     environment: 'node',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     reporters: ['default'],
-    coverage: { reportsDirectory: './coverage/guardx', provider: 'v8' },
+    coverage: { reportsDirectory: './coverage', provider: 'v8' },
   },
 });

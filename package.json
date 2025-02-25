@@ -1,10 +1,37 @@
 {
   "name": "guardx",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "description": "Protect your typescript/javascript projects from unnecessary if/else branches to check null/undefined values",
   "license": "MIT",
-  "scripts": {
-    "build": "nx build",
-    "test": "nx test"
+  "homepage": "https://github.com/DManavi/guardx#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DManavi/guardx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DManavi/guardx/issues"
+  },
+  "author": {
+    "name": "Danial Manavi",
+    "email": "me@dmanavi.com",
+    "url": "https://dmanavi.com"
+  },
+  "keywords": [
+    "guard",
+    "type-check",
+    "conditional",
+    "no-if",
+    "typescript"
+  ],
+  "nx": {
+    "includedScripts": []
+  },
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "@swc/core",
+      "esbuild",
+      "nx"
+    ]
   },
   "dependencies": {
     "tslib": "^2.3.0"
@@ -34,17 +61,7 @@
     "vite": "^5.0.0",
     "vitest": "^1.3.1"
   },
-  "nx": {
-    "includedScripts": []
-  },
-  "type": "commonjs",
-  "main": "./src/index.js",
-  "typings": "./src/index.d.ts",
-  "pnpm": {
-    "ignoredBuiltDependencies": [
-      "@swc/core",
-      "esbuild",
-      "nx"
-    ]
-  }
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "typings": "./dist/types/index.d.ts"
 }

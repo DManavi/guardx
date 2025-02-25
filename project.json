@@ -7,13 +7,23 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "executor": "nx:run-commands",
       "options": {
-        "outputPath": "dist/guardx",
-        "main": "./src/index.ts",
-        "tsConfig": "./tsconfig.lib.json",
-        "assets": ["*.md"]
+        "parallel": false,
+        "commands": [
+          {
+            "command": "rm -rf dist"
+          },
+          {
+            "command": "tsc -p tsconfig.build.json --outDir dist/types --emitDeclarationOnly"
+          },
+          {
+            "command": "tsc -p tsconfig.build.json --outDir dist/cjs --declaration false"
+          },
+          {
+            "command": "tsc -p tsconfig.build.json --outDir dist/esm --module ES2020  --declaration false"
+          }
+        ]
       }
     },
     "lint": {
@@ -21,9 +31,11 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
-        "reportsDirectory": "coverage/guardx"
+        "reportsDirectory": "coverage"
       }
     }
   }
