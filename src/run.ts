@@ -26,6 +26,11 @@ export type SafeRunResult<T = unknown, E = Error> =
   | FailSafeRunResult<E>
   | SuccessSafeRunResult<T>;
 
+/**
+ * Run a function safely and return the result (or the thrown error).
+ * @param fn Function to run
+ * @returns Result of the run
+ */
 export const safe = <T = unknown, E = Error>(
   fn: () => T
 ): SafeRunResult<T, E> => {
@@ -42,6 +47,11 @@ export const safe = <T = unknown, E = Error>(
   }
 };
 
+/**
+ * Run an async function safely and return the result (or the thrown error).
+ * @param fn Async function to run
+ * @returns Result of the run
+ */
 export const safeAsync = <T = unknown, E = Error>(
   fn: () => Promise<T>
 ): Promise<SafeRunResult<T, E>> => {
