@@ -1,34 +1,63 @@
-import { IfAny } from "type-fest";
+export type FailSafeRunResult<T = Error> = {
+  /**
+   * Indicate that the run failed.
+   */
+  success: false;
 
-import * as check from "./check";
+  /**
+   * Error that occurred during the run.
+   */
+  error: T;
+};
 
-/**
- * Runs a function if a condition is true, otherwise runs another function.
- * @param condition Condition to check
- * @param then
- * @param otherwise
- * @returns Either the result of the then function or the otherwise function
- */
-export function when(
-  condition: boolean,
-  then: (...args: any) => any,
-  otherwise?: (...args: any) => any
-): IfAny<
-  typeof condition,
-  ReturnType<typeof then>,
-  IfAny<
-    typeof otherwise extends (...args: any) => any,
-    ReturnType<typeof otherwise>,
-    never
-  >
-> {
-  // If the condition is true, call the then function
-  if (condition === true) {
-    return then();
+export type SuccessSafeRunResult<T = unknown> = {
+  /**
+   * Indicate that the run succeeded.
+   */
+  success: true;
+
+  /**
+   * Result of the run.
+   */
+  result: T;
+};
+
+export type SafeRunResult<T = unknown, E = Error> =
+  | FailSafeRunResult<E>
+  | SuccessSafeRunResult<T>;
+
+export const safe = <T = unknown, E = Error>(
+  fn: () => T
+): SafeRunResult<T, E> => {
+  try {
+    return {
+      success: true,
+      result: fn(),
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error,
+    };
   }
+};
 
-  // If the condition is false and the otherwise function is provided, call the otherwise function
-  if (check.isFunction(otherwise)) {
-    return otherwise();
-  }
-}
+export const safeAsync = <T = unknown, E = Error>(
+  fn: () => Promise<T>
+): Promise<SafeRunResult<T, E>> => {
+  return new Promise<SafeRunResult<T, E>>((resolve) => {
+    fn()
+      .then((result) =>
+        resolve({
+          success: true,
+          result,
+        })
+      )
+      .catch((error) =>
+        resolve({
+          success: false,
+          error,
+        })
+      );
+  });
+};

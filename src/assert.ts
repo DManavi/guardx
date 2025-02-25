@@ -1,7 +1,5 @@
-import { defaultTo } from "lodash";
-
-import * as check from "./check";
-import { fail } from "./util";
+import * as check from './check';
+import * as util from './util';
 
 /**
  * Type assertion functions are a new feature in TypeScript 3.7.
@@ -18,7 +16,12 @@ export function isNotNull<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is NonNullable<T> {
   if (check.isNull(val) === true) {
-    fail({ errorOrMessage: defaultTo(errorOrMessage, "Value is null") });
+    fail({
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        'Non-null value is expected, but null received.'
+      ),
+    });
   }
 }
 
@@ -32,7 +35,12 @@ export function IsNull<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is null {
   if (val !== null) {
-    fail({ errorOrMessage: defaultTo(errorOrMessage, "Value is not null") });
+    fail({
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        'null value is expected, but non-null received.'
+      ),
+    });
   }
 }
 
@@ -46,7 +54,12 @@ export function isNotUndefined<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is NonNullable<T> {
   if (check.isUndefined(val) === true) {
-    fail({ errorOrMessage: defaultTo(errorOrMessage, "Value is undefined") });
+    fail({
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        'Non-undefined value is expected, but undefined received.'
+      ),
+    });
   }
 }
 
@@ -61,7 +74,10 @@ export function isUndefined<T = unknown>(
 ): asserts val is undefined {
   if (val !== undefined) {
     fail({
-      errorOrMessage: defaultTo(errorOrMessage, "Value is not undefined"),
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        'undefined value is expected, but non-undefined received.'
+      ),
     });
   }
 }
@@ -77,9 +93,9 @@ export function isNotNullOrUndefined<T = unknown>(
 ): asserts val is NonNullable<T> {
   if (check.isNull(val) === true || check.isNullOrUndefined(val) === true) {
     fail({
-      errorOrMessage: defaultTo(
+      errorOrMessage: util.defaultTo(
         errorOrMessage,
-        "Value is either null or undefined"
+        'non-null and non-undefined value is expected, but null or undefined received.'
       ),
     });
   }
@@ -106,9 +122,9 @@ export function IsNotDefined<T = unknown>(
 ): asserts val is null | undefined {
   if (check.isNullOrUndefined(val) === false) {
     fail({
-      errorOrMessage: defaultTo(
+      errorOrMessage: util.defaultTo(
         errorOrMessage,
-        "Value is neither null nor undefined"
+        'Null or undefined value is expected, but non-null and non-undefined received.'
       ),
     });
   }
@@ -127,9 +143,9 @@ export function isEqual<T = unknown>(
 ): asserts val is T {
   if (val !== expected) {
     fail({
-      errorOrMessage: defaultTo(
+      errorOrMessage: util.defaultTo(
         errorOrMessage,
-        `Value is not equal to ${expected}`
+        `Value is expected to be equal to ${expected}, but received ${val}`
       ),
     });
   }
@@ -148,9 +164,9 @@ export function isNotEqual<T = unknown>(
 ): asserts val is T {
   if (val === expected) {
     fail({
-      errorOrMessage: defaultTo(
+      errorOrMessage: util.defaultTo(
         errorOrMessage,
-        `Value is equal to ${expected}`
+        `Value is expected to be not equal to ${expected}, but received ${val}`
       ),
     });
   }
@@ -174,27 +190,182 @@ export function isOneOf<T = unknown>(
   }
 
   fail({
-    errorOrMessage: defaultTo(
+    errorOrMessage: util.defaultTo(
       errorOrMessage,
-      `Value is not one of the allowed values: ${values.join(", ")}`
+      `Value is expected to be one of [${values.join(
+        ', '
+      )}], but received ${val}`
     ),
   });
 }
 
+/**
+ * Asserts that the value is true (strict equality).
+ * @param val Value to check
+ * @param errorOrMessage Error object or message to throw if the value is not true
+ */
 export function isTrue(
   val: boolean,
   errorOrMessage?: string | Error
 ): asserts val is true {
   if (val !== true) {
-    fail({ errorOrMessage: defaultTo(errorOrMessage, "Value is not true") });
+    fail({
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        'Value is expected to be true'
+      ),
+    });
   }
 }
 
+/**
+ * Asserts that the value is false (strict equality).
+ * @param val Value to check
+ * @param errorOrMessage Error object or message to throw if the value is not true
+ */
 export function isFalse(
   val: boolean,
   errorOrMessage?: string | Error
 ): asserts val is false {
   if (val !== false) {
-    fail({ errorOrMessage: defaultTo(errorOrMessage, "Value is not false") });
+    fail({
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        'Value is expected to be false'
+      ),
+    });
+  }
+}
+
+/**
+ * Asserts that the value is a boolean.
+ * @param val Value to check
+ * @param errorOrMessage Error object or message to throw if the value is not a string
+ */
+export function isBoolean(
+  val: unknown,
+  errorOrMessage?: string | Error
+): asserts val is boolean {
+  if (check.isString(val) === false) {
+    fail({
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        `Value is expected to be a boolean, but received ${typeof val}`
+      ),
+    });
+  }
+}
+
+/**
+ * Asserts that the value is a string.
+ * @param val Value to check
+ * @param errorOrMessage Error object or message to throw if the value is not a string
+ */
+export function isString(
+  val: unknown,
+  errorOrMessage?: string | Error
+): asserts val is string {
+  if (check.isString(val) === false) {
+    fail({
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        `Value is expected to be a string, but received ${typeof val}`
+      ),
+    });
+  }
+}
+
+/**
+ * Asserts that the value is a number.
+ * @param val Value to check
+ * @param errorOrMessage Error object or message to throw if the value is not a string
+ */
+export function isNumber(
+  val: unknown,
+  errorOrMessage?: string | Error
+): asserts val is number {
+  if (check.isString(val) === false) {
+    fail({
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        `Value is expected to be a number, but received ${typeof val}`
+      ),
+    });
+  }
+}
+
+/**
+ * Asserts that the value is a bigInt.
+ * @param val Value to check
+ * @param errorOrMessage Error object or message to throw if the value is not a string
+ */
+export function isBigInt(
+  val: unknown,
+  errorOrMessage?: string | Error
+): asserts val is bigint {
+  if (check.isString(val) === false) {
+    fail({
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        `Value is expected to be a bigint, but received ${typeof val}`
+      ),
+    });
+  }
+}
+
+/**
+ * Asserts that the value is a symbol.
+ * @param val Value to check
+ * @param errorOrMessage Error object or message to throw if the value is not a string
+ */
+export function isSymbol(
+  val: unknown,
+  errorOrMessage?: string | Error
+): asserts val is symbol {
+  if (check.isString(val) === false) {
+    fail({
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        `Value is expected to be a symbol, but received ${typeof val}`
+      ),
+    });
+  }
+}
+
+/**
+ * Asserts that the value is a function.
+ * @param val Value to check
+ * @param errorOrMessage Error object or message to throw if the value is not a string
+ */
+export function isFunction(
+  val: unknown,
+  errorOrMessage?: string | Error
+): asserts val is Function {
+  if (check.isString(val) === false) {
+    fail({
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        `Value is expected to be a function, but received ${typeof val}`
+      ),
+    });
+  }
+}
+
+/**
+ * Asserts that the value is an object.
+ * @param val Value to check
+ * @param errorOrMessage Error object or message to throw if the value is not a string
+ */
+export function isObject(
+  val: unknown,
+  errorOrMessage?: string | Error
+): asserts val is object {
+  if (check.isString(val) === false) {
+    fail({
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        `Value is expected to be an object, but received ${typeof val}`
+      ),
+    });
   }
 }

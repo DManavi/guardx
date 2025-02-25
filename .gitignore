@@ -133,3 +133,8 @@ dist
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+
+
+
+.nx/cache
+.nx/workspace-data

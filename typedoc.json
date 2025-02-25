@@ -1,0 +1,4 @@
+{
+  "entryPointStrategy": "expand",
+  "exclude": ["**/*+(.spec).ts"],
+}

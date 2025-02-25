@@ -1,6 +1,6 @@
 {
   "name": "guardx",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "MIT",
   "homepage": "https://github.com/DManavi/guardx#readme",
   "repository": {
@@ -15,17 +15,78 @@
     "email": "me@dmanavi.com",
     "url": "https://dmanavi.com"
   },
-  "keywords": [],
+  "keywords": [
+    "guard",
+    "type-check",
+    "conditional",
+    "no-if",
+    "typescript"
+  ],
   "description": "Protect your typescript/javascript projects from unnecessary if/else branches to check null/undefined values.",
-  "scripts": {},
-  "devDependencies": {
-    "@types/lodash": "^4.17.15",
-    "@types/node": "22",
-    "lodash": "^4.17.21",
-    "type-fest": "^4.34.1",
-    "typescript": "5"
+  "nx": {},
+  "scripts": {
+    "nx": "nx",
+    "docs": "typedoc src"
   },
-  "peerDependencies": {
-    "lodash": "^4"
-  }
+  "devDependencies": {
+    "@eslint/js": "^9.8.0",
+    "@nx/eslint": "19.8.14",
+    "@nx/eslint-plugin": "19.8.14",
+    "@nx/jest": "19.8.14",
+    "@nx/js": "19.8.14",
+    "@swc-node/register": "~1.9.1",
+    "@swc/core": "~1.5.7",
+    "@swc/helpers": "~0.5.11",
+    "@types/jest": "^29.5.12",
+    "@types/node": "22",
+    "eslint": "^9.8.0",
+    "eslint-config-prettier": "^9.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-node": "^29.7.0",
+    "nx": "19.8.14",
+    "prettier": "^2.6.2",
+    "ts-jest": "^29.1.0",
+    "ts-node": "10.9.1",
+    "tslib": "^2.3.0",
+    "typedoc": "^0.27.9",
+    "typescript": "^5.7.1",
+    "typescript-eslint": "^8.0.0"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./assert": {
+      "import": "./dist/assert.js",
+      "require": "./dist/assert.cjs",
+      "types": "./dist/assert.d.ts"
+    },
+    "./check": {
+      "import": "./dist/check.js",
+      "require": "./dist/check.cjs",
+      "types": "./dist/check.d.ts"
+    },
+    "./run": {
+      "import": "./dist/run.js",
+      "require": "./dist/run.cjs",
+      "types": "./dist/run.d.ts"
+    },
+    "./util": {
+      "import": "./dist/util.js",
+      "require": "./dist/util.cjs",
+      "types": "./dist/util.d.ts"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README",
+    "LICENSE",
+    "package.json"
+  ]
 }
