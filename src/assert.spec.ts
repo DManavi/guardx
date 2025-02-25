@@ -3,6 +3,8 @@
  * It's just a way to throw an error if the check fails.
  */
 
+/* eslint-disable @typescript-eslint/no-empty-function */
+
 describe('assert', () => {
   it('No test is needed', () => {});
 });

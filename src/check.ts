@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
+
 /**
  * Check if the value is null
  * @param val Value to check

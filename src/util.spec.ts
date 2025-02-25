@@ -1,5 +1,7 @@
 import * as mdl from './util';
 
+/* eslint-disable @typescript-eslint/no-empty-function */
+
 describe('util', () => {
   describe('fail', () => {
     it('should throw an error if the provided value is a string', () => {

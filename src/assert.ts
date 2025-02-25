@@ -6,6 +6,8 @@ import * as util from './util';
  * https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#assertion-functions
  */
 
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
+
 /**
  * Asserts that a value is not null.
  * @param val Value to check
@@ -16,7 +18,7 @@ export function isNotNull<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is NonNullable<T> {
   if (check.isNull(val) === true) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         'Non-null value is expected, but null received.'
@@ -35,7 +37,7 @@ export function IsNull<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is null {
   if (val !== null) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         'null value is expected, but non-null received.'
@@ -54,7 +56,7 @@ export function isNotUndefined<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is NonNullable<T> {
   if (check.isUndefined(val) === true) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         'Non-undefined value is expected, but undefined received.'
@@ -73,7 +75,7 @@ export function isUndefined<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is undefined {
   if (val !== undefined) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         'undefined value is expected, but non-undefined received.'
@@ -92,7 +94,7 @@ export function isNotNullOrUndefined<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is NonNullable<T> {
   if (check.isNull(val) === true || check.isNullOrUndefined(val) === true) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         'non-null and non-undefined value is expected, but null or undefined received.'
@@ -121,7 +123,7 @@ export function IsNotDefined<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is null | undefined {
   if (check.isNullOrUndefined(val) === false) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         'Null or undefined value is expected, but non-null and non-undefined received.'
@@ -142,7 +144,7 @@ export function isEqual<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is T {
   if (val !== expected) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         `Value is expected to be equal to ${expected}, but received ${val}`
@@ -163,7 +165,7 @@ export function isNotEqual<T = unknown>(
   errorOrMessage?: string | Error
 ): asserts val is T {
   if (val === expected) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         `Value is expected to be not equal to ${expected}, but received ${val}`
@@ -189,7 +191,7 @@ export function isOneOf<T = unknown>(
     }
   }
 
-  fail({
+  util.fail({
     errorOrMessage: util.defaultTo(
       errorOrMessage,
       `Value is expected to be one of [${values.join(
@@ -209,7 +211,7 @@ export function isTrue(
   errorOrMessage?: string | Error
 ): asserts val is true {
   if (val !== true) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         'Value is expected to be true'
@@ -228,7 +230,7 @@ export function isFalse(
   errorOrMessage?: string | Error
 ): asserts val is false {
   if (val !== false) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         'Value is expected to be false'
@@ -247,7 +249,7 @@ export function isBoolean(
   errorOrMessage?: string | Error
 ): asserts val is boolean {
   if (check.isString(val) === false) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         `Value is expected to be a boolean, but received ${typeof val}`
@@ -266,7 +268,7 @@ export function isString(
   errorOrMessage?: string | Error
 ): asserts val is string {
   if (check.isString(val) === false) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         `Value is expected to be a string, but received ${typeof val}`
@@ -285,7 +287,7 @@ export function isNumber(
   errorOrMessage?: string | Error
 ): asserts val is number {
   if (check.isString(val) === false) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         `Value is expected to be a number, but received ${typeof val}`
@@ -304,7 +306,7 @@ export function isBigInt(
   errorOrMessage?: string | Error
 ): asserts val is bigint {
   if (check.isString(val) === false) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         `Value is expected to be a bigint, but received ${typeof val}`
@@ -323,7 +325,7 @@ export function isSymbol(
   errorOrMessage?: string | Error
 ): asserts val is symbol {
   if (check.isString(val) === false) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         `Value is expected to be a symbol, but received ${typeof val}`
@@ -342,7 +344,7 @@ export function isFunction(
   errorOrMessage?: string | Error
 ): asserts val is Function {
   if (check.isString(val) === false) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         `Value is expected to be a function, but received ${typeof val}`
@@ -361,7 +363,7 @@ export function isObject(
   errorOrMessage?: string | Error
 ): asserts val is object {
   if (check.isString(val) === false) {
-    fail({
+    util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         `Value is expected to be an object, but received ${typeof val}`
