@@ -72,21 +72,9 @@
       "import": "./index.mjs",
       "default": "./index.cjs"
     },
-    "./assert": {
-      "import": "./assert.mjs",
-      "default": "./assert.cjs"
-    },
-    "./check": {
-      "import": "./check.mjs",
-      "default": "./check.cjs"
-    },
-    "./run": {
-      "import": "./run.mjs",
-      "default": "./run.cjs"
-    },
-    "./util": {
-      "import": "./util.mjs",
-      "default": "./util.cjs"
+    "./*": {
+      "import": "./*.mjs",
+      "default": "./*.cjs"
     }
   }
 }
