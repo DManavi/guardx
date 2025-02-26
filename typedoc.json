@@ -1,0 +1,8 @@
+// typedoc.json
+{
+  "entryPointStrategy": "expand",
+
+  "exclude": ["src/**/*.spec.ts", "dist/**", "coverage/**"],
+  "out": "./docs",
+  "tsconfig": "./tsconfig.lib.json"
+}

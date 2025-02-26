@@ -17,9 +17,9 @@ export type SuccessSafeRunResult<T = unknown> = {
   success: true;
 
   /**
-   * Result of the run.
+   * Result output of the function.
    */
-  result: T;
+  output: T;
 };
 
 export type SafeRunResult<T = unknown, E = Error> =
@@ -37,7 +37,7 @@ export const safe = <T = unknown, E = Error>(
   try {
     return {
       success: true,
-      result: fn(),
+      output: fn(),
     };
   } catch (error) {
     return {
@@ -60,7 +60,7 @@ export const safeAsync = <T = unknown, E = Error>(
       .then((result) =>
         resolve({
           success: true,
-          result,
+          output: result,
         })
       )
       .catch((error) =>

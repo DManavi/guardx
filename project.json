@@ -22,6 +22,9 @@
         ]
       }
     },
+    "docs": {
+      "command": "typedoc src/"
+    },
     "lint": {
       "command": "eslint ./src ./package.json"
     },

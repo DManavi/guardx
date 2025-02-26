@@ -1,60 +1,165 @@
-# Guardx
+# GuardX
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+Protect your typescript/javascript projects from unnecessary if/else branches to check null/undefined values.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+GuardX help developers to have type-safety during development (compile time) and type-check on runtime. Your IDE understands better when a value is null/undefined, and your app won't crash because of accessing a property of null or undefined value.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Purpose
 
-## Finish your CI setup
+As a TypeScript/Javascript developer you may end up being in a situation like this.
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/yXew5XOaT0)
+```typescript
 
+/**
+ * A function that may return undefined
+ */
+function findUserById(userId: number): User | undefined {
+  // an operation that may return undefined or the user
+}
 
-## Run tasks
+function updateUserInfo(userId: number, emailAddress: string;): void {
+  const user = findUserById(userId); // Now the user is either a User or an undefined value
 
-To build the library use:
+  // I should either type-check the user like below
+  if (typeof user === 'undefined') {
+    throw Error('User not found');
+  }
 
-```sh
-npx nx build
+  user.emailAddress = emailAddress;
+
+  // or use ? operator
+  user?.emailAddress = emailAddress;
+}
 ```
-        
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Seems easy?
 
-## Versioning and releasing
+- What if I have tons of places like this (which we always have)?
+- What if I want to catch the error and behave differently based on the error?
 
-To version and release the library use
+## Usage
 
+### assert
+
+Assert module help you to throw error based on a certain criteria. This way the app won't run and an error is thrown immediately.
+
+```typescript
+import * as assert from 'guardx/assert';
+
+/**
+ * A function that may return undefined
+ */
+function findUserById(userId: number): User | undefined {
+  // an operation that may return undefined or the user
+}
+
+const user = findUserById(123);
+
+assert.isDefined(user); // or assert.isNotNullOrUndefined(user);
+
+// from now on, the user is always an instance of User
+// I can safely access user properties both in development time and runtime
+user.emailAddress = 'new-email@somewhere.com';
 ```
-npx nx release
+
+There are other methods available. Check [them](#references) in API references page.
+
+### check
+
+Check module helps typescript to have understand types better by type guards. But, it doesn't break the application on runtime. So developer is responsible for reacting to the unwanted types (e.g. null or undefined).
+
+```typescript
+import * as check from 'guardx/check';
+
+/**
+ * A function that may return undefined
+ */
+function findUserById(userId: number): User | undefined {
+  // an operation that may return undefined or the user
+}
+
+const user = findUserById(123);
+
+if (check.isNullOrUndefined(user)) {
+  // custom logic to handle null or undefined values
+  return;
+}
+
+// from now on, the user is always an instance of User
+// I can safely access user properties both in development time and runtime
+user.emailAddress = 'new-email@somewhere.com';
 ```
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
+There are other methods available. Check [them](#references) in API references page.
 
-[Learn more about Nx release &raquo;](hhttps://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### run
 
+Run module help developers to run both sync and async functions and get both result and error on the same line w/o writing a try/catch block. This helps you have a cleaner and more readable code.
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```typescript
+/**
+ * A function that may return undefined
+ */
+function findUserById(userId: number): User | undefined {
+  // an operation that may return undefined or the user
+}
 
-## Install Nx Console
+// w/o guardx
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+let user: User | undefined;
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+try {
+  user = findUserById(123);
+} catch (err) {
+  // log the error or set an alarm
+}
 
-## Useful links
+// do something with the user object
 
-Learn more:
+// w/ guardx
+import * as run from 'guardx/run';
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+const result = run.safe(() => findUserById(123)); // or you can use bind method here
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+// it also works with async functions
+
+const result = run.safeAsync(async () => findUserById(123)); // or you can use bind method here
+
+// failed to execute the function
+if (!result.success) {
+  // Now typescript knows result is an object like this
+  // {
+  //    success: false,
+  //    error: Error
+  // }
+
+  console.error('Failed', result.error);
+}
+
+// code was executed successfully
+if (result.success) {
+  // Now typescript knows result is an object like this
+  // {
+  //    success: true,
+  //    output: Error
+  // }
+}
+```
+
+There are other methods available. Check [them](#references) in API references page.
+
+### util
+
+TBD.
+
+There are other methods available. Check [them](#references) in API references page.
+
+## Development
+
+TBD.
+
+## References
+
+[API Documentation](https://dmanavi.github.io/guardx_website/)
+
+[Compile Typescript Packages to Multiple format](https://nx.dev/recipes/tips-n-tricks/compile-multiple-formats)
