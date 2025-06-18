@@ -248,7 +248,7 @@ export function isBoolean(
   val: unknown,
   errorOrMessage?: string | Error
 ): asserts val is boolean {
-  if (check.isString(val) === false) {
+  if (check.isBoolean(val) === false) {
     util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
@@ -280,13 +280,13 @@ export function isString(
 /**
  * Asserts that the value is a number.
  * @param val Value to check
- * @param errorOrMessage Error object or message to throw if the value is not a string
+ * @param errorOrMessage Error object or message to throw if the value is not a number
  */
 export function isNumber(
   val: unknown,
   errorOrMessage?: string | Error
 ): asserts val is number {
-  if (check.isString(val) === false) {
+  if (check.isNumber(val) === false) {
     util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
@@ -299,13 +299,13 @@ export function isNumber(
 /**
  * Asserts that the value is a bigInt.
  * @param val Value to check
- * @param errorOrMessage Error object or message to throw if the value is not a string
+ * @param errorOrMessage Error object or message to throw if the value is not a BitInt
  */
 export function isBigInt(
   val: unknown,
   errorOrMessage?: string | Error
 ): asserts val is bigint {
-  if (check.isString(val) === false) {
+  if (check.isBigInt(val) === false) {
     util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
@@ -318,13 +318,13 @@ export function isBigInt(
 /**
  * Asserts that the value is a symbol.
  * @param val Value to check
- * @param errorOrMessage Error object or message to throw if the value is not a string
+ * @param errorOrMessage Error object or message to throw if the value is not a symbol
  */
 export function isSymbol(
   val: unknown,
   errorOrMessage?: string | Error
 ): asserts val is symbol {
-  if (check.isString(val) === false) {
+  if (check.isSymbol(val) === false) {
     util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
@@ -337,13 +337,13 @@ export function isSymbol(
 /**
  * Asserts that the value is a function.
  * @param val Value to check
- * @param errorOrMessage Error object or message to throw if the value is not a string
+ * @param errorOrMessage Error object or message to throw if the value is not a function
  */
 export function isFunction(
   val: unknown,
   errorOrMessage?: string | Error
 ): asserts val is Function {
-  if (check.isString(val) === false) {
+  if (check.isFunction(val) === false) {
     util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
@@ -356,17 +356,36 @@ export function isFunction(
 /**
  * Asserts that the value is an object.
  * @param val Value to check
- * @param errorOrMessage Error object or message to throw if the value is not a string
+ * @param errorOrMessage Error object or message to throw if the value is not an object
  */
 export function isObject(
   val: unknown,
   errorOrMessage?: string | Error
 ): asserts val is object {
-  if (check.isString(val) === false) {
+  if (check.isObject(val) === false) {
     util.fail({
       errorOrMessage: util.defaultTo(
         errorOrMessage,
         `Value is expected to be an object, but received ${typeof val}`
+      ),
+    });
+  }
+}
+
+/**
+ * Asserts that the value is an array.
+ * @param val Value to check
+ * @param errorOrMessage Error object or message to throw if the value is not an array
+ */
+export function isArray(
+  val: unknown,
+  errorOrMessage?: string | Error
+): asserts val is Array<unknown> {
+  if (Array.isArray(val) === false) {
+    util.fail({
+      errorOrMessage: util.defaultTo(
+        errorOrMessage,
+        `Value is expected to be an array, but received ${typeof val}`
       ),
     });
   }
