@@ -1,6 +1,6 @@
 {
   "name": "guardx",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Protect your typescript/javascript projects from unnecessary if/else branches to check null/undefined values",
   "license": "MIT",
   "homepage": "https://github.com/DManavi/guardx#readme",
@@ -70,27 +70,27 @@
     ".": {
       "types": "./types/index.d.ts",
       "import": "./esm/index.js",
-      "require": "./cjs/index.cjs"
+      "require": "./cjs/index.js"
     },
     "./assert": {
       "types": "./types/assert.d.ts",
       "import": "./esm/assert.js",
-      "require": "./cjs/assert.cjs"
+      "require": "./cjs/assert.js"
     },
     "./check": {
       "types": "./types/check.d.ts",
       "import": "./esm/check.js",
-      "require": "./cjs/check.cjs"
+      "require": "./cjs/check.js"
     },
     "./run": {
       "types": "./types/run.d.ts",
       "import": "./esm/run.js",
-      "require": "./cjs/run.cjs"
+      "require": "./cjs/run.js"
     },
     "./util": {
       "types": "./types/util.d.ts",
       "import": "./esm/util.js",
-      "require": "./cjs/util.cjs"
+      "require": "./cjs/util.js"
     }
   }
 }

@@ -14,4 +14,5 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   outDir: 'dist/guardx',
+  outExtension: () => ({ js: '.js', dts: '.d.ts' }),
 });
