@@ -11,14 +11,14 @@
       "options": {
         "parallel": false,
         "commands": [
-          "tsup",
-          
+          "tsup --out-dir dist/guardx/esm --format esm",
+          "tsup --out-dir dist/guardx/cjs --format cjs",
+          "tsup --out-dir dist/guardx/types --dts-only --format esm",
+
           "cp package.json dist/guardx/",
           "cp README.md dist/guardx/",
           "cp CHANGELOG.md dist/guardx/",
-          "cp LICENSE.md dist/guardx/",
-
-          "rm -rf dist/guardx/*.d.mts"
+          "cp LICENSE.md dist/guardx/"
         ]
       }
     },
@@ -30,9 +30,7 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": [
-        "{options.reportsDirectory}"
-      ],
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "coverage"
       }

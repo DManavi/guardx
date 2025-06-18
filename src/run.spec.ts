@@ -8,7 +8,7 @@ describe('run', () => {
       const result = mdl.safe(sampleFunc);
 
       assert.isTrue(result.success);
-      assert.isEqual(result.result, 1);
+      assert.isEqual(result.output, 1);
     });
 
     it('should return a failed result', () => {
@@ -29,7 +29,7 @@ describe('run', () => {
       const result = await mdl.safeAsync(sampleFunc);
 
       assert.isTrue(result.success);
-      assert.isEqual(result.result, 1);
+      assert.isEqual(result.output, 1);
     });
 
     it('should return a failed result', async () => {

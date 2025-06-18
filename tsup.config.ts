@@ -10,31 +10,7 @@ export default defineConfig({
   ],
   bundle: false,
   splitting: false,
-  format: ['cjs', 'esm'],
-  outExtension: ({ format }) => {
-    let extensionName: string;
-
-    switch (format) {
-      case 'cjs': {
-        extensionName = '.cjs';
-        break;
-      }
-
-      case 'esm': {
-        extensionName = '.mjs';
-        break;
-      }
-
-      case 'iife': {
-        extensionName = '.iife.js';
-        break;
-      }
-    }
-
-    return { js: extensionName };
-  },
   tsconfig: 'tsconfig.lib.json',
-  dts: true,
   sourcemap: true,
   clean: true,
   outDir: 'dist/guardx',
