@@ -1,6 +1,6 @@
 {
   "name": "guardx",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Protect your typescript/javascript projects from unnecessary if/else branches to check null/undefined values",
   "license": "MIT",
   "homepage": "https://github.com/DManavi/guardx#readme",
