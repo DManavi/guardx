@@ -23,6 +23,9 @@
       "inputs": ["default", "^production"]
     }
   },
+  "release": {
+    "releaseTagPattern": "v${version}"
+  },
   "plugins": [
     {
       "plugin": "@nx/eslint/plugin",
