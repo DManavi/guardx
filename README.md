@@ -1,165 +1,172 @@
+<div align="center">
+
 # GuardX
 
-Protect your typescript/javascript projects from unnecessary if/else branches to check null/undefined values.
+**Runtime guards and type-safe results for TypeScript and JavaScript.**
 
-GuardX help developers to have type-safety during development (compile time) and type-check on runtime. Your IDE understands better when a value is null/undefined, and your app won't crash because of accessing a property of null or undefined value.
+[![npm version](https://img.shields.io/npm/v/guardx.svg)](https://www.npmjs.com/package/guardx)
+[![npm downloads](https://img.shields.io/npm/dm/guardx.svg)](https://www.npmjs.com/package/guardx)
+[![license](https://img.shields.io/npm/l/guardx.svg)](https://github.com/DManavi/guardx/blob/main/LICENSE.md)
 
-## Purpose
+[Installation](#installation) · [Quick start](#quick-start) · [API](#api) · [Development](#development)
 
-As a TypeScript/Javascript developer you may end up being in a situation like this.
+</div>
 
-```typescript
+GuardX helps you validate values at runtime while preserving TypeScript's type
+narrowing. Use assertion functions when invalid data should stop execution,
+type guards when you want to handle it yourself, or result objects when you
+want to avoid repetitive `try`/`catch` blocks.
 
-/**
- * A function that may return undefined
- */
-function findUserById(userId: number): User | undefined {
-  // an operation that may return undefined or the user
-}
+## Why GuardX?
 
-function updateUserInfo(userId: number, emailAddress: string;): void {
-  const user = findUserById(userId); // Now the user is either a User or an undefined value
+- **Type-safe assertions** narrow values after a runtime check.
+- **Composable type guards** fit naturally into conditionals and filters.
+- **Result-based error handling** keeps success and failure paths explicit.
+- **ESM and CommonJS support** lets you use the same API in either module system.
+- **Focused imports** keep call sites clear: `guardx/assert`, `guardx/check`,
+  `guardx/run`, and `guardx/util`.
 
-  // I should either type-check the user like below
-  if (typeof user === 'undefined') {
-    throw Error('User not found');
-  }
+## Installation
 
-  user.emailAddress = emailAddress;
-
-  // or use ? operator
-  user?.emailAddress = emailAddress;
-}
+```bash
+npm install guardx
 ```
 
-Seems easy?
+```bash
+pnpm add guardx
+```
 
-- What if I have tons of places like this (which we always have)?
-- What if I want to catch the error and behave differently based on the error?
+```bash
+yarn add guardx
+```
 
-## Usage
+## Quick start
 
-### assert
+### Assert that a value is defined
 
-Assert module help you to throw error based on a certain criteria. This way the app won't run and an error is thrown immediately.
+Assertions throw at runtime and narrow the value for all code that follows.
 
 ```typescript
 import * as assert from 'guardx/assert';
 
-/**
- * A function that may return undefined
- */
-function findUserById(userId: number): User | undefined {
-  // an operation that may return undefined or the user
-}
+type User = {
+  id: number;
+  emailAddress: string;
+};
+
+declare function findUserById(userId: number): User | undefined;
 
 const user = findUserById(123);
 
-assert.isDefined(user); // or assert.isNotNullOrUndefined(user);
+assert.isDefined(user, 'User not found');
 
-// from now on, the user is always an instance of User
-// I can safely access user properties both in development time and runtime
-user.emailAddress = 'new-email@somewhere.com';
+// TypeScript now knows that user is a User.
+user.emailAddress = 'new-email@example.com';
 ```
 
-There are other methods available. Check [them](#references) in API references page.
+You can pass either an error message or an `Error` instance:
 
-### check
+```typescript
+assert.isDefined(user, new Error('User not found'));
+```
 
-Check module helps typescript to have understand types better by type guards. But, it doesn't break the application on runtime. So developer is responsible for reacting to the unwanted types (e.g. null or undefined).
+### Narrow a value with a type guard
+
+Checks return booleans and leave the response to your application.
 
 ```typescript
 import * as check from 'guardx/check';
 
-/**
- * A function that may return undefined
- */
-function findUserById(userId: number): User | undefined {
-  // an operation that may return undefined or the user
+declare const value: string | null | undefined;
+
+if (check.isNullOrUndefined(value)) {
+  console.log('No value was provided');
+} else {
+  // value is narrowed to string.
+  console.log(value.toUpperCase());
 }
-
-const user = findUserById(123);
-
-if (check.isNullOrUndefined(user)) {
-  // custom logic to handle null or undefined values
-  return;
-}
-
-// from now on, the user is always an instance of User
-// I can safely access user properties both in development time and runtime
-user.emailAddress = 'new-email@somewhere.com';
 ```
 
-There are other methods available. Check [them](#references) in API references page.
+### Replace `try`/`catch` with a result
 
-### run
-
-Run module help developers to run both sync and async functions and get both result and error on the same line w/o writing a try/catch block. This helps you have a cleaner and more readable code.
+`safe` and `safeAsync` return a discriminated union, so checking `success`
+narrows the result to either its output or error.
 
 ```typescript
-/**
- * A function that may return undefined
- */
-function findUserById(userId: number): User | undefined {
-  // an operation that may return undefined or the user
-}
-
-// w/o guardx
-
-let user: User | undefined;
-
-try {
-  user = findUserById(123);
-} catch (err) {
-  // log the error or set an alarm
-}
-
-// do something with the user object
-
-// w/ guardx
 import * as run from 'guardx/run';
 
-const result = run.safe(() => findUserById(123)); // or you can use bind method here
+const result = run.safe(() => JSON.parse('{"ready":true}'));
 
-// it also works with async functions
-
-const result = run.safeAsync(async () => findUserById(123)); // or you can use bind method here
-
-// failed to execute the function
-if (!result.success) {
-  // Now typescript knows result is an object like this
-  // {
-  //    success: false,
-  //    error: Error
-  // }
-
-  console.error('Failed', result.error);
-}
-
-// code was executed successfully
 if (result.success) {
-  // Now typescript knows result is an object like this
-  // {
-  //    success: true,
-  //    output: Error
-  // }
+  console.log(result.output);
+} else {
+  console.error(result.error);
 }
 ```
 
-There are other methods available. Check [them](#references) in API references page.
+For promises, use `safeAsync`:
 
-### util
+```typescript
+const result = await run.safeAsync(() => fetch('/api/users/123'));
 
-TBD.
+if (!result.success) {
+  console.error('Request failed', result.error);
+}
+```
 
-There are other methods available. Check [them](#references) in API references page.
+## API
+
+You can import every module from the package root:
+
+```typescript
+import { assert, check, run, util } from 'guardx';
+```
+
+Or import only the module you need:
+
+```typescript
+import * as assert from 'guardx/assert';
+import * as check from 'guardx/check';
+import * as run from 'guardx/run';
+import * as util from 'guardx/util';
+```
+
+| Module | Purpose | Available functions |
+| --- | --- | --- |
+| `assert` | Validate a value or throw | `isDefined`, `isNotNullOrUndefined`, `isNotNull`, `isNotUndefined`, `isUndefined`, `isEqual`, `isNotEqual`, `isOneOf`, `isTrue`, `isFalse`, `isBoolean`, `isString`, `isNumber`, `isBigInt`, `isSymbol`, `isFunction`, `isObject`, `isArray` |
+| `check` | Narrow values with type guards | `isDefined`, `isNullOrUndefined`, `isNull`, `isUndefined`, `isString`, `isBoolean`, `isNumber`, `isBigInt`, `isSymbol`, `isFunction`, `isObject` |
+| `run` | Capture function output or errors | `safe`, `safeAsync` |
+| `util` | Shared utility helpers | `defaultTo`, `fail` |
+
+See the generated [documentation](https://dmanavi.github.io/guardx_website/)
+for additional API details.
 
 ## Development
 
-TBD.
+GuardX uses [pnpm](https://pnpm.io/), [Nx](https://nx.dev/), and
+[Vitest](https://vitest.dev/). Node.js 20 is used in CI.
 
-## References
+```bash
+pnpm install
+pnpm exec nx test guardx
+pnpm exec nx lint guardx
+pnpm exec nx build guardx
+```
 
-[API Documentation](https://dmanavi.github.io/guardx_website/)
+To generate the API documentation locally:
 
-[Compile Typescript Packages to Multiple format](https://nx.dev/recipes/tips-n-tricks/compile-multiple-formats)
+```bash
+pnpm exec nx docs guardx
+```
+
+## Contributing
+
+Bug reports and pull requests are welcome. Before opening a pull request,
+please run the test, lint, and build commands above.
+
+- [Report a bug or request a feature](https://github.com/DManavi/guardx/issues)
+- [View the changelog](https://github.com/DManavi/guardx/blob/main/CHANGELOG.md)
+
+## License
+
+GuardX is available under the [MIT License](https://github.com/DManavi/guardx/blob/main/LICENSE.md).
